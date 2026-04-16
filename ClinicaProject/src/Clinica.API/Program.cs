@@ -1,3 +1,21 @@
+using Clinica.API.Data;
+using Clinica.API.Services;
+using Microsoft.EntityFrameworkCore;
+
+var builder = WebApplication.CreateViewController(); // ou WebApplication.CreateBuilder(args);
+
+// 1. Configurar MySQL
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+// 2. Registrar os Services (Injeção de Dependência)
+// Isso permite que a Controller use o Service
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+// 3. Adicionar suporte a Controllers (essencial para Eduardo, Gabriel e Caio)
+builder.Services.AddControllers();
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
