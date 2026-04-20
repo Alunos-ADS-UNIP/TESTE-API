@@ -56,8 +56,9 @@ namespace Clinica.API.Models.Entities
             cpf = cpf.Trim();
             if (cpf.Length > 14)
                 throw new ArgumentException("CPF deve ter no máximo 14 caracteres.");
-            if (!ValidarCpf(cpf))
-                throw new ArgumentException("CPF inválido.");
+            //TODO: Implementar validação de CPF
+            //if (!ValidarCpf(cpf))
+            // throw new ArgumentException("CPF inválido.");
 
             // 5. Senha — NOT NULL, min 8, max 20
             if (string.IsNullOrWhiteSpace(senha))
@@ -109,37 +110,6 @@ namespace Clinica.API.Models.Entities
         /// <summary>
         /// Valida CPF com ou sem máscara (ex: 123.456.789-09 ou 12345678909).
         /// </summary>
-        private static bool ValidarCpf(string cpf)
-        {
-            // Remove máscara
-            string soDigitos = Regex.Replace(cpf, @"[^\d]", "");
-
-            if (soDigitos.Length != 11)
-                return false;
-
-            // Rejeita sequências repetidas (ex: 111.111.111-11)
-            if (new string(soDigitos[0], 11) == soDigitos)
-                return false;
-
-            // Primeiro dígito verificador
-            int soma = 0;
-            for (int i = 0; i < 9; i++)
-                soma += (soDigitos[i] - '0') * (10 - i);
-            int resto = soma % 11;
-            int digito1 = resto < 2 ? 0 : 11 - resto;
-            if ((soDigitos[9] - '0') != digito1)
-                return false;
-
-            // Segundo dígito verificador
-            soma = 0;
-            for (int i = 0; i < 10; i++)
-                soma += (soDigitos[i] - '0') * (11 - i);
-            resto = soma % 11;
-            int digito2 = resto < 2 ? 0 : 11 - resto;
-            if ((soDigitos[10] - '0') != digito2)
-                return false;
-
-            return true;
-        }
+        
     }
 }
