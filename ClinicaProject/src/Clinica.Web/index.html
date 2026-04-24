@@ -1,11 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="./index.js"></script>
+    <title>Agendamento Consulta</title>
 </head>
 <body>
-    
+    <div class="titulo">Agendamento Consulta</div>
+
+    <div class="Agendamento">
+        <div class="paciente">
+            <h2>Paciente</h2>
+            <p>Nome Paciente: Davi gusmao </p>
+            <p>Idade Paciente: 19 anos </p>
+        </div>
+
+        <div class="terapeuta">
+            <h2>Terapeuta/Médico</h2>
+            <!-- Alterado ID para selectTerapeutaPrincipal -->
+            <select id="selectTerapeutaPrincipal">
+                <option value="">Selecione um Profissional...</option>
+                <option value="Davi">Davi Gusmao Vinciaqui (Psicólogo)</option>
+                <option value="Ana">Ana Caroline Freitas (Psicóloga)</option>
+                <option value="Adolfo">Adolfo Martins (Nutricionista)</option>
+                <option value="Nubia"> Nubia Andrade (Geral)</option>
+            </select>
+
+            <button id="btnAbrir">Agendar Consulta</button>
+        </div>
+
+        <dialog id="modalAgenda">
+            <div class="agenda-header">
+                <h2>Novo Agendamento</h2>
+            </div>
+
+            <div class="passo">
+                <label>1. Selecione o Terapeuta/Médico</label>
+                <select id="selectTerapeuta" class="input-estilizado">
+                    <option value="">Selecione um profissional...</option>
+                    <option value="Davi">Davi Gusmao Vinciaqui (Psicólogo)</option>
+                    <option value="Ana">Ana Caroline Freitas (Psicóloga)</option>
+                    <option value="Adolfo">Adolfo Martins (Nutricionista)</option>
+                    <option value="Nubia"> Nubia Andrade (Geral)</option>
+                </select>
+            </div>
+
+            <div class="passo">
+                <label>2. Escolha a Data</label>
+                <input type="date" id="dataAgendamento" class="input-estilizado">
+            </div>
+
+            <div class="passo">
+                <label>3. Horários Disponíveis</label>
+                <div id="containerHorarios" class="horarios-grid">
+                    <!-- O JavaScript vai preencher aqui automaticamente -->
+                </div>
+            </div>
+
+            <div class="resumo-final">
+                <p id="textoResumo">Selecione as opções acima...</p>
+                <button id="btnFechar" style="background: #ff4d4d; color: white;">Fechar</button>
+                <button id="confirmarAgendamento" class="btn-confirmar">Confirmar</button>
+            </div>
+        </dialog>
+
+        <dialog id="modalSucesso">
+            <div style="text-align: center; padding: 20px;">
+                <h2 style="color: #28a745;">✅ Agendamento Realizado!</h2>
+                <hr>
+                <div id="dadosConfirmados" style="margin: 20px 0; line-height: 1.6;"></div>
+                <button onclick="location.reload()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                    OK, entendi!
+                </button>
+            </div>
+        </dialog>
+
+        <div id="toastErro" class="toast">
+            <div class="toast-content">
+                <span class="toast-icon">⚠️</span>
+                <div class="toast-message">
+                    <strong>Erro no Agendamento</strong>
+                    <p>Selecione o médico e o horário antes de confirmar.</p>
+                </div>
+                <span class="toast-close" onclick="fecharToast()">&times;</span>
+            </div>
+            <div class="toast-progress"></div>
+        </div>
+    </div>
 </body>
 </html>
