@@ -1,0 +1,214 @@
+*{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+div.titulo{
+    margin: auto;
+    padding: auto;
+    font-size: 30px;
+    align-items: center;
+    justify-items: center;
+    display: flex;
+    place-items: center;
+    
+}
+.Agendamento{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.paciente{
+    padding: 10px;
+    width: 400px;
+    height: 300px;
+    background-color: rgb(212, 212, 212);
+    border: 2px solid #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-sizing: border-box; 
+}
+.terapeuta{
+    padding: auto;
+    margin-left: auto;
+    background-color: rgb(212, 212, 212);
+    width: 400px;
+    height: 300px;
+    border: 2px solid #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+button{
+    
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: rgb(187, 187, 187);
+
+}
+dialog {
+    background-color: white !important;
+    color: black !important;
+    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    width: 350px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.passo { margin-top: 15px; text-align: left; }
+
+.input-estilizado {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.horarios-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-hora {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-hora.selecionado {
+    background-color: #0d1117;
+    color: white;
+}
+#modalSucesso {
+    border: none;
+    border-radius: 15px;
+    width: 300px;
+    background-color: white;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+#modalSucesso::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+}
+.campo-erro {
+    border: 2px solid red !important;
+}
+#modalErro {
+    border: none;
+    border-radius: 15px;
+    width: 320px;
+    padding: 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.modal-erro-content {
+    padding: 30px;
+    text-align: center;
+    background-color: white;
+}
+
+.icone-erro {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+#modalErro h2 {
+    color: #d9534f; /* Vermelho aviso */
+    margin-bottom: 15px;
+}
+
+#modalErro p {
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+#btnFecharErro {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
+
+#modalErro::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px); /* Efeito de desfoque no fundo */
+}
+.toast {
+    position: fixed;
+    bottom: 20px;       /* 20px de distância do fundo da tela */
+    right: -400px;      /* Começa escondido à direita */
+    background: #222;
+    color: white;
+    padding: 15px;
+    border-radius: 4px;
+    width: 320px;
+    transition: all 0.5s ease;
+    overflow: hidden;
+    z-index: 10000;
+}
+
+.toast.show {
+    right: 20px;        /* Move para dentro da tela quando ativado */
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.toast-message p {
+    font-size: 13px;
+    color: #ccc;
+    margin: 5px 0 0;
+}
+
+.toast-close {
+    margin-left: auto;
+    cursor: pointer;
+    font-size: 10px;
+    opacity: 0.7;
+}
+
+/* A barrinha vermelha de progresso */
+/* Estilo da barra */
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background: #d9534f;
+    width: 100%;
+}
+
+/* Quando o toast aparece, a animação começa */
+.toast.show .toast-progress {
+    animation: diminuirBarra 3s linear forwards;
+}
+
+/* O segredo: Esta classe será controlada pelo JS */
+.pausar-animacao {
+    animation-play-state: paused !important;
+}
+
+@keyframes diminuirBarra {
+    from { width: 100%; }
+    to { width: 0%; }
+}

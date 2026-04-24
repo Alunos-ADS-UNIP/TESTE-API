@@ -1,11 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Agendamento Constulta</title>
 </head>
 <body>
-    
+        <div class="titulo">Agendamento Consulta</div>
+
+<div class="Agendamento">
+            <div class="paciente">
+            <h2>Paciente</h2>
+            <p>Nome Paciente: Davi gusmao </p>
+            <p>Idade Paciente: 19 anos </p>
+        </div>
+
+        <div class="terapeuta">
+            <h2>Terapeuta</h2>
+            <p>Nome do Terapeuta:</p>
+            <p>Especialidade: </p>
+            <button id="btnAbrir">Agendar Consulta</button>
+        </div>
+
+
+<dialog id="modalAgenda">
+    <div class="agenda-header">
+        <h2>Novo Agendamento</h2>
+    </div>
+
+    <div class="passo">
+        <label>1. Selecione o Terapeuta</label>
+        <select id="selectTerapeuta" class="input-estilizado">
+            <option value="">Selecione um profissional...</option>
+            <option value="davi">Davi Gusmão (Psicólogo)</option>
+            <option value="ana">Ana Silva (Nutricionista)</option>
+        </select>
+    </div>
+
+    <div class="passo">
+        <label>2. Escolha a Data</label>
+        <input type="date" id="dataAgendamento" class="input-estilizado">
+    </div>
+
+    <div class="passo">
+        <label>3. Horários Disponíveis</label>
+        <div id="containerHorarios" class="horarios-grid">
+               <div id="containerHorarios" class="horarios-grid">
+            <!-- O JavaScript vai preencher aqui automaticamente -->
+        </div>
+        </div>
+    </div>
+
+    <div class="resumo-final">
+        <p id="textoResumo">Selecione as opções acima...</p>
+        <button id="btnFechar" style="background: #ff4d4d; color: white;">Fechar</button>
+        <button id="confirmarAgendamento" class="btn-confirmar">Confirmar</button>
+    </div>
+</dialog>
+<dialog id="modalSucesso">
+    <div style="text-align: center; padding: 20px;">
+        <h2 style="color: #28a745;">✅ Agendamento Realizado!</h2>
+        <hr>
+        <div id="dadosConfirmados" style="margin: 20px 0; line-height: 1.6;">
+            <!-- O JS vai preencher os dados aqui -->
+        </div>
+        <button onclick="location.reload()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+            OK, entendi!
+        </button>
+    </div>
+</dialog>
+<dialog id="modalErro">
+    <div class="modal-erro-content">
+        <div class="icone-erro">⚠️</div>
+        <h2>Atenção!</h2>
+        <p>Por favor, selecione o <strong>Terapeuta</strong>, a <strong>Data</strong> e o <strong>Horário</strong> para continuar.</p>
+        <button id="btnFecharErro">Entendido</button>
+    </div>
+</dialog>
+    <div id="toastErro" class="toast">
+        <div class="toast-content">
+            <span class="toast-icon">⚠️</span>
+            <div class="toast-message">
+                <strong>Erro no Agendamento</strong>
+                <p>Selecione o terapeuta e o horário antes de confirmar.</p>
+            </div>
+            <span class="toast-close" onclick="fecharToast()">&times;</span>
+        </div>
+        <div class="toast-progress"></div>
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+
+
 </body>
 </html>
