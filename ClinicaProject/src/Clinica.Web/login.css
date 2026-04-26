@@ -1,51 +1,179 @@
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
-
-body {
-    background-color: #f0f2f5;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* ============================================================
+   DESIGN SYSTEM (MODERN LOGIN)
+============================================================ */
+:root {
+    --p-paciente: oklch(78% 0.12 120);
+    --p-paciente-dark: oklch(70% 0.12 120);
+    --text-main: oklch(25% 0.02 240);
+    --text-muted: oklch(50% 0.02 240);
+    --bg-gradient: radial-gradient(circle at top right, oklch(96% 0.01 240), oklch(90% 0.02 240));
+    --white: #ffffff;
+    --border: oklch(92% 0.02 240);
+    --radius-pro: 24px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.login-container { width: 100%; max-width: 400px; padding: 20px; }
+/* ============================================================
+   LAYOUT BASE
+============================================================ */
+body {
+    margin: 0;
+    padding: 0;
+    min-block-size: 100dvb;
+    background: var(--bg-gradient);
+    font-family: 'Inter', system-ui, sans-serif;
+    display: grid;
+    place-items: center;
+    color: var(--text-main);
+}
 
+/* ============================================================
+   CONTAINER DO LOGIN (GLASSMORPHISM)
+============================================================ */
 .login-box {
-    background: white;
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    background: color-mix(in srgb, var(--white), transparent 2%);
+    inline-size: 100%;
+    max-inline-size: 420px;
+    padding: 3rem;
+    border-radius: var(--radius-pro);
+    box-shadow: 
+        0 20px 50px -12px oklch(0% 0 0 / 0.08),
+        0 0 0 1px var(--white);
+    backdrop-filter: blur(10px);
+    animation: slideUp 0.6s var(--transition);
+}
+
+/* ============================================================
+   TIPOGRAFIA
+============================================================ */
+.login-box h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
     text-align: center;
 }
 
-.input-group { text-align: left; margin-bottom: 15px; }
+.login-box p {
+    color: var(--text-muted);
+    text-align: center;
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+}
 
-.input-group label { display: block; font-size: 14px; margin-bottom: 5px; font-weight: bold; }
+/* ============================================================
+   INPUTS & LABELS
+============================================================ */
+.input-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-main);
+    padding-left: 0.25rem;
+}
 
 .input-estilizado {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    inline-size: 100%;
+    padding: 1rem 1.25rem;
+    border-radius: 14px;
+    border: 2px solid var(--border);
+    background: var(--bg-main);
+    font-size: 1rem;
+    transition: var(--transition);
     outline: none;
+    box-sizing: border-box;
 }
 
-.input-erro { border: 2px solid red !important; background-color: #fff5f5; }
+.input-estilizado:focus {
+    border-color: var(--p-paciente);
+    background: var(--white);
+    box-shadow: 0 0 0 4px oklch(78% 0.12 120 / 0.15);
+}
 
+.input-estilizado::placeholder {
+    color: oklch(80% 0.01 240);
+}
+
+/* ============================================================
+   BOTÃO DE ENTRAR
+============================================================ */
 .btn-auth {
-    width: 100%;
-    padding: 12px;
-    background-color: #A7C27E;
-    color: white;
+    inline-size: 100%;
+    margin-top: 1rem;
+    padding: 1.1rem;
+    border-radius: 14px;
     border: none;
-    border-radius: 8px;
-    font-weight: bold;
+    background: var(--text-main); /* Cor escura para destaque */
+    color: var(--white);
+    font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
-    margin-top: 10px;
+    transition: var(--transition);
 }
 
-.btn-auth:hover { background-color: #8da66a; }
+.btn-auth:hover {
+    background: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px oklch(0% 0 0 / 0.2);
+}
 
-.auth-footer { margin-top: 20px; font-size: 13px; display: flex; flex-direction: column; gap: 8px; }
+.btn-auth:active {
+    transform: translateY(0);
+}
 
-.auth-footer a { color: #A7C27E; text-decoration: none; }
+/* ============================================================
+   FOOTER DO LOGIN (LINKS)
+============================================================ */
+.auth-footer {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+}
+
+.auth-footer a {
+    color: var(--p-paciente-dark);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.auth-footer a:hover {
+    color: var(--text-main);
+    text-decoration: underline;
+}
+
+.auth-footer span {
+    color: var(--text-muted);
+}
+
+/* ============================================================
+   ANIMAÇÕES
+============================================================ */
+@keyframes slideUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+============================================================ */
+@media (max-width: 480px) {
+    body { padding: 1.5rem; }
+    .login-box { padding: 2rem; }
+    .login-box h2 { font-size: 1.75rem; }
+}

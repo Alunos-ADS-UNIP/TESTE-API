@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Profissional - Sistema de Agendamento</title>
+    <link rel="stylesheet" href="estilogeral.css">
+    <!-- Reutilizando o estilo moderno das outras telas -->
+</head>
+<body>
+
+    <div class="auth-container">
+        <form class="auth-box" style="border-top: 5px solid #4a6fa5;">
+            <h2 style="color: #4a6fa5;">Cadastro de Terapeuta</h2>
+            <p>Cadastre seu perfil profissional para começar os atendimentos.</p>
+
+            <div class="input-group">
+                <label for="nome">Nome Completo</label>
+                <input type="text" id="nome" placeholder="Ex: Dr. João Silva" class="input-estilizado">
+            </div>
+
+            <div class="input-group">
+                <label for="cpf">CPF</label>
+                <input type="text" id="cpf" placeholder="000.000.000-00" maxlength="14" class="input-estilizado">
+            </div>
+
+            <div class="input-group">
+                <label for="especialidade">Especialidade / Área de Atuação</label>
+                <input type="text" id="especialidade" placeholder="Ex: Psicólogo Clínico, Nutricionista" class="input-estilizado">
+            </div>
+
+            <div class="input-group">
+                <label for="email">E-mail Profissional</label>
+                <input type="email" id="email" placeholder="seu@email.com" class="input-estilizado">
+            </div>
+
+            <div class="input-group">
+                <label for="senha">Senha de Acesso</label>
+                <input type="password" id="senha" placeholder="Mínimo 6 caracteres" class="input-estilizado">
+            </div>
+
+            <!-- CHECKBOX LGPD -->
+            <div class="lgpd-container" style="display: flex; align-items: flex-start; gap: 10px; margin: 20px 0; text-align: left; font-size: 13px;">
+                <input type="checkbox" id="checkLGPD" style="width: 18px; height: 18px; cursor: pointer;">
+                <label for="checkLGPD" style="color: #666; cursor: pointer;">
+                    Eu li e aceito as normas de ética profissional e autorizo o tratamento dos meus dados conforme a <strong>LGPD</strong>.
+                </label>
+            </div>
+
+            <!-- Botão começa desabilitado -->
+            <button type="button" id="btnCadastrar" class="btn-auth" style="background-color: #4a6fa5;" disabled>
+                Finalizar Cadastro
+            </button>
+            
+            <div class="auth-footer" style="margin-top: 20px; font-size: 13px;">
+                <span>Já é cadastrado? <a href="./login.html" style="color: #4a6fa5; text-decoration: none; font-weight: bold;">Acessar Sistema</a></span>
+            </div>
+        </form>
+    </div>
+
+    <script src="cadastro.js"></script>
+</body>
+</html>

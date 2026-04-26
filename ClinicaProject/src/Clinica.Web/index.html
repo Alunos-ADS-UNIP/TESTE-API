@@ -8,86 +8,84 @@
     <title>Agendamento Consulta</title>
 </head>
 <body>
-    <div class="titulo">Agendamento Consulta</div>
+   <body>
+    <div class="titulo-pagina">Agendamento Consulta</div>
 
     <div class="Agendamento">
-        <div class="paciente">
+        <!-- Bloco do Paciente -->
+        <div class="card-info paciente">
+            <div class="indicador"></div>
             <h2>Paciente</h2>
-            <p>Nome Paciente: Davi gusmao </p>
-            <p>Idade Paciente: 19 anos </p>
-        </div>
-
-        <div class="terapeuta">
-            <h2>Terapeuta/Médico</h2>
-            <!-- Alterado ID para selectTerapeutaPrincipal -->
-            <select id="selectTerapeutaPrincipal">
-                <option value="">Selecione um Profissional...</option>
-                <option value="Davi">Davi Gusmao Vinciaqui (Psicólogo)</option>
-                <option value="Ana">Ana Caroline Freitas (Psicóloga)</option>
-                <option value="Adolfo">Adolfo Martins (Nutricionista)</option>
-                <option value="Nubia"> Nubia Andrade (Geral)</option>
-            </select>
-
-            <button id="btnAbrir">Agendar Consulta</button>
-        </div>
-
-        <dialog id="modalAgenda">
-            <div class="agenda-header">
-                <h2>Novo Agendamento</h2>
+            <div class="dados">
+                <p><strong>Nome:</strong> Davi gusmao</p>
+                <p><strong>Idade:</strong> 19 anos</p>
             </div>
+        </div>
 
-            <div class="passo">
-                <label>1. Selecione o Terapeuta/Médico</label>
-                <select id="selectTerapeuta" class="input-estilizado">
-                    <option value="">Selecione um profissional...</option>
+        <!-- Bloco do Terapeuta -->
+        <div class="card-info terapeuta">
+            <div class="indicador"></div>
+            <h2>Terapeuta/Médico</h2>
+            <div class="acao-grupo">
+                <select id="selectTerapeutaPrincipal" class="select-moderno">
+                    <option value="">Selecione um Profissional...</option>
                     <option value="Davi">Davi Gusmao Vinciaqui (Psicólogo)</option>
                     <option value="Ana">Ana Caroline Freitas (Psicóloga)</option>
                     <option value="Adolfo">Adolfo Martins (Nutricionista)</option>
                     <option value="Nubia"> Nubia Andrade (Geral)</option>
                 </select>
+                <button id="btnAbrir" class="btn-primario">Agendar Consulta</button>
             </div>
+        </div>
 
-            <div class="passo">
-                <label>2. Escolha a Data</label>
-                <input type="date" id="dataAgendamento" class="input-estilizado">
+        <!-- Popup de Agendamento -->
+        <dialog id="modalAgenda" class="modal-moderno">
+            <div class="modal-header">
+                <h2>Novo Agendamento</h2>
             </div>
-
-            <div class="passo">
-                <label>3. Horários Disponíveis</label>
-                <div id="containerHorarios" class="horarios-grid">
-                    <!-- O JavaScript vai preencher aqui automaticamente -->
+            
+            <div class="modal-body">
+                <div class="passo">
+                    <label>1. Selecione o Terapeuta/Médico</label>
+                    <select id="selectTerapeuta" class="select-moderno">
+                        <option value="">Selecione um profissional...</option>
+                        <option value="Davi">Davi Gusmao Vinciaqui (Psicólogo)</option>
+                        <option value="Ana">Ana Caroline Freitas (Psicóloga)</option>
+                        <option value="Adolfo">Adolfo Martins (Nutricionista)</option>
+                        <option value="Nubia"> Nubia Andrade (Geral)</option>
+                    </select>
                 </div>
-            </div>
 
-            <div class="resumo-final">
-                <p id="textoResumo">Selecione as opções acima...</p>
-                <button id="btnFechar" style="background: #ff4d4d; color: white;">Fechar</button>
-                <button id="confirmarAgendamento" class="btn-confirmar">Confirmar</button>
+                <div class="passo">
+                    <label>2. Escolha a Data</label>
+                    <input type="date" id="dataAgendamento" class="input-data">
+                </div>
+
+                <div class="passo">
+                    <label>3. Horários Disponíveis</label>
+                    <div id="containerHorarios" class="horarios-grid"></div>
+                </div>
+
+                <div class="resumo-final">
+                    <p id="textoResumo">Selecione as opções acima...</p>
+                    <div class="botoes-footer">
+                        <button id="btnFechar" class="btn-cancelar">Fechar</button>
+                        <button id="confirmarAgendamento" class="btn-confirmar">Confirmar</button>
+                    </div>
+                </div>
             </div>
         </dialog>
 
-        <dialog id="modalSucesso">
-            <div style="text-align: center; padding: 20px;">
-                <h2 style="color: #28a745;">✅ Agendamento Realizado!</h2>
-                <hr>
-                <div id="dadosConfirmados" style="margin: 20px 0; line-height: 1.6;"></div>
-                <button onclick="location.reload()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
-                    OK, entendi!
-                </button>
+        <!-- Toast de Erro (Aviso) -->
+        <div id="toastErro" class="toast-moderno">
+            <div class="toast-barra"></div>
+            <div class="toast-texto">
+                <strong>⚠️ Erro no Agendamento</strong>
+                <p>Selecione o médico e o horário.</p>
             </div>
-        </dialog>
-
-        <div id="toastErro" class="toast">
-            <div class="toast-content">
-                <span class="toast-icon">⚠️</span>
-                <div class="toast-message">
-                    <strong>Erro no Agendamento</strong>
-                    <p>Selecione o médico e o horário antes de confirmar.</p>
-                </div>
-                <span class="toast-close" onclick="fecharToast()">&times;</span>
-            </div>
-            <div class="toast-progress"></div>
         </div>
     </div>
+</body>
+
 </body>
 </html>
