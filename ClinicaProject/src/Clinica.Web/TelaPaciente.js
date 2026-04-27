@@ -1,5 +1,5 @@
-window.onload = function() {
-    // 1. MAPEAMENTO DE ELEMENTOS (IDs do seu HTML)
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. MAPEAMENTO DE ELEMENTOS
     const el = {
         btnAbrir: document.getElementById("btnAbrir"),
         modalAgenda: document.getElementById("modalAgenda"),
@@ -9,14 +9,15 @@ window.onload = function() {
         btnEntendido: document.getElementById("btnEntendido"),
         statusBox: document.getElementById("statusConsulta"),
         containerHoras: document.getElementById("containerHorarios"),
-        inputData: document.getElementById("dataAgendamento"), // Campo de data
+        inputData: document.getElementById("dataAgendamento"),
         selectTerapeuta: document.getElementById("selectTerapeuta")
     };
 
+    const API_URL = "http://localhost:3000/agendaFisioData";
+    const NOME_PACIENTE = "Davi Gusmão";
     let consultaAtiva = null;
     let horaSelecionada = "";
 
-    // Grade de 30 em 30 minutos (Deve ser a mesma do terapeuta)
     const gradeHorarios = [
         "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", 
         "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", 
@@ -24,32 +25,91 @@ window.onload = function() {
     ];
 
     /* ============================================================
-       LOGICA DE ATUALIZAÇÃO DO GRID (SINCRONIA COM TERAPEUTA)
+       FUNÇÕES DE COMUNICAÇÃO COM A API
     ============================================================ */
-    const atualizarGridPaciente = () => {
+
+    const buscarAgendaAPI = async () => {
+        try {
+            const response = await fetch(API_URL);
+            return await response.json();
+        } catch (error) {
+            console.error("Erro ao buscar agenda:", error);
+            return {};
+        }
+    };
+
+    const salvarAgendaAPI = async (novaAgenda) => {
+        try {
+            await fetch(API_URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(novaAgenda)
+            });
+        } catch (error) {
+            alert("Erro ao salvar no servidor.");
+        }
+    };
+
+    /* ============================================================
+       LÓGICA DE INTERFACE
+    ============================================================ */
+
+    // Verifica se já existe uma consulta marcada para o paciente ao carregar a tela
+    const checarConsultaExistente = async () => {
+        const agenda = await buscarAgendaAPI();
+        
+        Object.keys(agenda).forEach(data => {
+            Object.keys(agenda[data]).forEach(hora => {
+                if (agenda[data][hora].paciente === NOME_PACIENTE) {
+                    consultaAtiva = {
+                        medico: agenda[data][hora].medico || "Fisioterapeuta",
+                        dataOriginal: data,
+                        dataExibicao: data.split('-').reverse().join('/'),
+                        hora: hora
+                    };
+                    renderizarCardAtivo();
+                }
+            });
+        });
+    };
+
+    const renderizarCardAtivo = () => {
+        if (!consultaAtiva) return;
+
+        el.statusBox.innerHTML = `
+            <div class="card-agendado" style="background:#f0fdf4; padding:20px; border-radius:15px; border:1px solid #bbf7d0; text-align:left;">
+                <p><strong>Sessão com ${consultaAtiva.medico}</strong></p>
+                <p>Dia ${consultaAtiva.dataExibicao} às ${consultaAtiva.hora}</p>
+                <button id="btnCancelar" class="btn-cancelar" style="width:100%; margin-top:15px; cursor:pointer;">Desmarcar Consulta</button>
+            </div>
+        `;
+        el.btnAbrir.style.display = "none";
+        document.getElementById("btnCancelar").onclick = () => el.modalCancel.showModal();
+    };
+
+    const atualizarGridPaciente = async () => {
         const dataSel = el.inputData.value;
         if (!dataSel) {
-            el.containerHoras.innerHTML = "<p style='font-size:0.8rem; color:gray; grid-column:1/-1;'>Selecione a data primeiro...</p>";
+            el.containerHoras.innerHTML = "<p style='font-size:0.8rem; color:gray; grid-column:1/-1;'>Selecione a data...</p>";
             return;
         }
 
-        // Lê o "banco de dados" compartilhado
-        const agendaGlobal = JSON.parse(localStorage.getItem('agendaFisioData')) || {};
+        const agendaGlobal = await buscarAgendaAPI();
         const agendaDia = agendaGlobal[dataSel] || {};
 
         el.containerHoras.innerHTML = "";
-        horaSelecionada = ""; // Reseta seleção ao mudar data
+        horaSelecionada = "";
 
         gradeHorarios.forEach(h => {
             const info = agendaDia[h] || { status: "disponivel" };
+            const isOcupado = info.status === "bloqueado";
+
             const btn = document.createElement("button");
             btn.innerText = h;
             btn.type = "button";
+            btn.className = `btn-hora ${isOcupado ? 'bloqueado' : 'disponivel'}`;
             
-            // Aplica estilos baseados no status definido pelo médico
-            btn.className = `btn-hora ${info.status}`;
-            
-            if (info.status === "bloqueado") {
+            if (isOcupado) {
                 btn.disabled = true;
             } else {
                 btn.onclick = () => {
@@ -62,19 +122,19 @@ window.onload = function() {
         });
     };
 
-    // Listeners para atualizar o grid
+    /* ============================================================
+       EVENTOS
+    ============================================================ */
+
     el.inputData.onchange = atualizarGridPaciente;
 
     el.btnAbrir.onclick = () => {
-        el.inputData.value = ""; // Limpa data ao abrir
-        el.containerHoras.innerHTML = "<p style='font-size:0.8rem; color:gray; grid-column:1/-1;'>Aguardando data...</p>";
+        el.inputData.value = "";
+        el.containerHoras.innerHTML = "<p style='color:gray;'>Aguardando data...</p>";
         el.modalAgenda.showModal();
     };
 
-    /* ============================================================
-       LOGICA DE CONFIRMAÇÃO (SALVAMENTO NO BANCO)
-    ============================================================ */
-    el.confirmar.onclick = () => {
+    el.confirmar.onclick = async () => {
         const medico = el.selectTerapeuta.value;
         const dataOriginal = el.inputData.value;
         
@@ -82,19 +142,18 @@ window.onload = function() {
             return alert("Por favor, preencha todos os campos!");
         }
 
-        // 1. CARREGA BANCO, SALVA PACIENTE E BLOQUEIA HORÁRIO
-        let agendaGlobal = JSON.parse(localStorage.getItem('agendaFisioData')) || {};
+        const agendaGlobal = await buscarAgendaAPI();
         if (!agendaGlobal[dataOriginal]) agendaGlobal[dataOriginal] = {};
 
-        // Salvando na estrutura que o Terapeuta lê
+        // Salva na estrutura da API
         agendaGlobal[dataOriginal][horaSelecionada] = {
             status: "bloqueado",
-            paciente: "Davi Gusmão" // Nome do cliente logado
+            paciente: NOME_PACIENTE,
+            medico: medico
         };
 
-        localStorage.setItem('agendaFisioData', JSON.stringify(agendaGlobal));
+        await salvarAgendaAPI(agendaGlobal);
 
-        // 2. PREPARA DADOS PARA O POPUP DE SUCESSO
         consultaAtiva = { 
             medico, 
             dataOriginal,
@@ -103,7 +162,7 @@ window.onload = function() {
         };
 
         document.getElementById("dadosConfirmados").innerHTML = `
-            <div class="resumo-sucesso">
+            <div class="resumo-sucesso" style="text-align:left;">
                 <p><strong>Especialista:</strong> ${consultaAtiva.medico}</p>
                 <p><strong>Data:</strong> ${consultaAtiva.dataExibicao}</p>
                 <p><strong>Horário:</strong> ${consultaAtiva.hora}</p>
@@ -114,33 +173,30 @@ window.onload = function() {
         el.modalSucesso.showModal();
     };
 
-    /* ============================================================
-       POS-AGENDAMENTO E CANCELAMENTO
-    ============================================================ */
     el.btnEntendido.onclick = () => {
         el.modalSucesso.close();
-        el.statusBox.innerHTML = `
-            <div class="card-agendado" style="background:#f0fdf4; padding:20px; border-radius:15px; border:1px solid #bbf7d0;">
-                <p><strong>Sessão com ${consultaAtiva.medico}</strong></p>
-                <p>Dia ${consultaAtiva.dataExibicao} às ${consultaAtiva.hora}</p>
-                <button id="btnCancelar" class="btn-cancelar" style="width:100%; margin-top:15px;">Desmarcar Consulta</button>
-            </div>
-        `;
-        el.btnAbrir.style.display = "none";
-        document.getElementById("btnCancelar").onclick = () => el.modalCancel.showModal();
+        renderizarCardAtivo();
     };
 
-    document.getElementById("confirmarCancelamento").onclick = () => {
-        // REMOVE DO BANCO AO CANCELAR
-        let agendaGlobal = JSON.parse(localStorage.getItem('agendaFisioData')) || {};
+    document.getElementById("confirmarCancelamento").onclick = async () => {
+        const agendaGlobal = await buscarAgendaAPI();
+        
         if (agendaGlobal[consultaAtiva.dataOriginal]) {
-            agendaGlobal[consultaAtiva.dataOriginal][consultaAtiva.hora] = { status: "disponivel", paciente: null };
+            // Libera o horário na API
+            agendaGlobal[consultaAtiva.dataOriginal][consultaAtiva.hora] = { 
+                status: "disponivel", 
+                paciente: null 
+            };
         }
-        localStorage.setItem('agendaFisioData', JSON.stringify(agendaGlobal));
+
+        await salvarAgendaAPI(agendaGlobal);
 
         consultaAtiva = null;
         el.modalCancel.close();
         el.statusBox.innerHTML = '<p style="color: gray;">Nenhuma sessão agendada.</p>';
         el.btnAbrir.style.display = "block";
     };
-};
+
+    // Inicialização
+    checarConsultaExistente();
+});

@@ -3,6 +3,19 @@ window.onload = function() {
     const inputCPF = document.getElementById("cpfLogin");
     const inputSenha = document.getElementById("senha");
     const URL_API = "http://localhost:8000/login"; 
+    // Substitua a parte do salvamento por isso:
+const confirmarNoServidor = async (dadosAgendamento) => {
+    try {
+        await fetch('http://localhost:3000/consultas_fisio', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dadosAgendamento)
+        });
+        console.log("Salvo no db.json com sucesso!");
+    } catch (erro) {
+        console.error("Erro ao conectar com a API:", erro);
+    }
+};
 
     // --- MÁSCARA DE CPF ---
     if (inputCPF) {
